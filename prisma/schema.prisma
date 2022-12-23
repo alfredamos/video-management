@@ -1,0 +1,43 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+
+model Genre {
+   @@map("genres")
+  id String @id @default(uuid())
+  name String @db.VarChar(255)
+  movies Movie[]
+}
+
+
+model Movie {
+  @@map("movies")
+  id String @id @default(uuid())
+  title String @db.VarChar(255)
+  producer String @db.VarChar(255)
+  description String @db.Text
+  youtubeId String @db.VarChar(255)
+  starsCount Decimal
+  isActive Boolean @default(false)
+  releaseDate DateTime 
+  lastUpdated DateTime @updatedAt
+  genre Genre? @relation(fields: [genreId], references: [id])
+  genreId String?
+  pgRating Rating @default(Family)
+}
+
+enum Rating {
+  Violence
+  Family
+  Language
+  Sex
+}
