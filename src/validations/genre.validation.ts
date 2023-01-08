@@ -8,7 +8,7 @@ const genreSchema = Joi.object({
 })
 
 export const genreValidation = (genre: Genre) => {
-    const {name} = genre;
+    const {name} = genre;    
     
     return genreSchema.validate({name});
 }

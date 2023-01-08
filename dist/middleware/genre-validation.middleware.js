@@ -12,11 +12,9 @@ const genreValidationMiddleware = (req, res, next) => {
     const genre = gen;
     const { error, value } = (0, genre_validation_1.genreValidation)(genre);
     if (error) {
-        let errorMessages = [];
-        for (const err of error.details) {
-            errorMessages.push(err.message);
-        }
-        throw (0, http_errors_1.default)(http_status_codes_1.StatusCodes.BAD_REQUEST, `${errorMessages} - please provide all values.`);
+        const errorMessages = error.details.map((err) => err.message).join(". ");
+        next((0, http_errors_1.default)(http_status_codes_1.StatusCodes.BAD_REQUEST, `${errorMessages} - please provide all values.`));
+        return;
     }
     next();
     return value;

@@ -7,17 +7,19 @@ import {
     getAllGenres,
     getGenreById
 } from "../controllers/genre.controller";
+import { checkIfAuthenticated } from "../middleware/check-if-authenticated.middleware";
+import { checkIfAdmin } from "../middleware/check-if-admin.middleware";
 
 const router = Router();
 
 router.route('/')
-    .get(getAllGenres)
-    .post(genreValidationMiddleware, createGenre);
+    .get(checkIfAuthenticated, getAllGenres)
+    .post(genreValidationMiddleware, checkIfAuthenticated, createGenre);
 
 router.route('/:id')
-    .delete(deleteGenre)
-    .get(getGenreById)
-    .patch(genreValidationMiddleware, editGenre);
+    .delete(checkIfAuthenticated, checkIfAdmin, deleteGenre)
+    .get(checkIfAuthenticated, getGenreById)
+    .patch(genreValidationMiddleware, checkIfAuthenticated, checkIfAdmin, editGenre);
 
 
 export default router;

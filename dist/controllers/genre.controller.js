@@ -61,7 +61,7 @@ const getAllGenres = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     const genres = yield prisma.genre.findMany({
         include: {
             movies: true,
-        }
+        },
     });
     res.status(http_status_codes_1.StatusCodes.OK).json(genres);
 });
@@ -72,7 +72,7 @@ const getGenreById = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         where: { id },
         include: {
             movies: true,
-        }
+        },
     });
     if (!genre) {
         throw (0, http_errors_1.default)(http_status_codes_1.StatusCodes.NOT_FOUND, `Genre with id = ${id} is not found.`);

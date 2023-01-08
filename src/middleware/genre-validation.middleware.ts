@@ -7,18 +7,15 @@ import {Genre} from "../models/genre.model";
 export const genreValidationMiddleware = (req: Request, res: Response, next: NextFunction) =>{
     const {body: gen} = req;
 
-    const genre = gen as Genre;
+    const genre = gen as Genre;   
 
     const {error, value} = genreValidation(genre);
 
-    if (error){
-        let errorMessages: string[] = [];
+    if (error){        
+        const errorMessages = error.details.map((err) => err.message).join(". ");
 
-        for (const err of error.details){
-            errorMessages.push(err.message);
-        }
-
-        throw createdError(StatusCodes.BAD_REQUEST, `${errorMessages} - please provide all values.`);
+        next(createdError(StatusCodes.BAD_REQUEST, `${errorMessages} - please provide all values.`));
+        return;
     }
 
     next();

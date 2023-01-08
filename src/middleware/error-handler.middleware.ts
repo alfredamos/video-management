@@ -8,19 +8,14 @@ export const errorHandlerMiddleware = (
   res: Response,
   next: NextFunction
 ) => {
-  console.log("In errorHandler, error message", err.message);
-  //console.log("In middleware, error : ", err);
+  
+  const message = err.message || "Something went wrong.";
+  const name = err.name || "Internal Server Error";
+  const statusCode = err.statusCode || StatusCodes.INTERNAL_SERVER_ERROR;
 
-  if (
-    err.status === StatusCodes.BAD_REQUEST ||
-    err.status === StatusCodes.NOT_FOUND
-  ) {
-    return res.status(err.status).json({
-      message: err.message,
-    });
-  }
-
-  return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-    message: err.message,
+  return res.status(statusCode).json({
+    status: 'fail',
+    message,
+    name
   });
 };

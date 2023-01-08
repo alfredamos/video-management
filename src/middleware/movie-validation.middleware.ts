@@ -12,13 +12,10 @@ export const movieValidationMiddleware = (req: Request, res: Response, next: Nex
     const {error, value} = movieValidation(movie);
 
     if (error){
-        let errorMessages: string[] = [];
+        const errorMessages = error.details.map((err) => err.message).join(". ");
 
-        for (const err of error.details){
-            errorMessages.push(err.message);
-        }
-
-        throw createdError(StatusCodes.BAD_REQUEST, `${errorMessages} - please provide all values.`);
+        next(createdError(StatusCodes.BAD_REQUEST, `${errorMessages} - please provide all values.`));
+        return;
     }
 
     next();
